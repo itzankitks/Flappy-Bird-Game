@@ -10,7 +10,7 @@ class Base extends PositionComponent with HasGameRef<FlappyBirdGame> {
   Future<void> onLoad() async {
     final img = await Flame.images.load('base.png');
     size = Vector2(gameRef.size.x, gameRef.size.y / 5);
-    position = Vector2(0, gameRef.size.y - size.y);
+    position = Vector2(0, 4 * (gameRef.size.y / 5));
     add(SpriteComponent(sprite: Sprite(img), size: size));
   }
 }

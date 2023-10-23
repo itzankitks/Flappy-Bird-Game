@@ -12,11 +12,10 @@ class Bird extends SpriteComponent with HasGameRef<FlappyBirdGame> {
 
   final velocity = 200;
   final fps = 120;
-  final gravity = 3;
+  final gravity = 4;
   @override
   FutureOr<void> onLoad() async {
     final birdUp = await Flame.images.load('bird_up.png');
-    // size = Vector2(50, 50);
     final imageSize = await Flame.images.load('bird_up.png').then((image) =>
         Size(image.width.toDouble() + 5, image.height.toDouble() + 5));
     size = Vector2(imageSize.width, imageSize.height);
@@ -35,7 +34,7 @@ class Bird extends SpriteComponent with HasGameRef<FlappyBirdGame> {
   void fly() {
     add(
       MoveByEffect(
-        Vector2(0, -100),
+        Vector2(0, -150),
         EffectController(
           duration: 0.2,
           curve: Curves.decelerate,
