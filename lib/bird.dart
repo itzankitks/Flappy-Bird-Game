@@ -1,18 +1,18 @@
 import 'dart:async';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/flame.dart';
-import 'package:flappy_bird/base.dart';
 import 'package:flappy_bird/flappy_bird_game.dart';
 import 'package:flutter/widgets.dart';
 
-class Bird extends SpriteComponent with HasGameRef<FlappyBirdGame> {
+class Bird extends SpriteComponent
+    with HasGameRef<FlappyBirdGame>, CollisionCallbacks {
   Bird();
 
-  final velocity = 200;
-  final fps = 120;
-  final gravity = 4;
+  double velocity = 75;
+  final gravity = 3;
   @override
   FutureOr<void> onLoad() async {
     final birdUp = await Flame.images.load('bird_up.png');
@@ -21,6 +21,7 @@ class Bird extends SpriteComponent with HasGameRef<FlappyBirdGame> {
     size = Vector2(imageSize.width, imageSize.height);
     position = Vector2(gameRef.size.x / 5, (gameRef.size.y - size.y) / 2);
     sprite = Sprite(birdUp);
+    add(RectangleHitbox());
     // final birdDown = await Flame.images.load('bird_down.png');
     // final birdMid = await Flame.images.load('bird_mid.png');
   }
@@ -34,12 +35,23 @@ class Bird extends SpriteComponent with HasGameRef<FlappyBirdGame> {
   void fly() {
     add(
       MoveByEffect(
-        Vector2(0, -150),
+        Vector2(0, -1 * velocity),
         EffectController(
           duration: 0.2,
           curve: Curves.decelerate,
         ),
       ),
     );
+  }
+
+  @override
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollisionStart(intersectionPoints, other);
+    gameOver();
+  }
+
+  void gameOver() {
+    gameRef.pauseEngine();
   }
 }
