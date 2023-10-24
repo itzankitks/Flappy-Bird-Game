@@ -51,7 +51,12 @@ class Bird extends SpriteComponent
     gameOver();
   }
 
-  void gameOver() {
+  gameOver() {
+    gameRef.overlays.add('gameOver');
     gameRef.pauseEngine();
+  }
+
+  void reset() {
+    position = Vector2(gameRef.size.x / 5, (gameRef.size.y - size.y) / 2);
   }
 }

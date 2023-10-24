@@ -13,18 +13,16 @@ class PipeGeneration extends PositionComponent with HasGameRef<FlappyBirdGame> {
   @override
   Future<void> onLoad() async {
     position.x = gameRef.size.x;
-    const minHeight = 50;
-    const maxHeight = 300;
-    final randomHeight = minHeight + _random.nextInt(maxHeight - minHeight);
+    final heightMinusGround = 4 * (gameRef.size.y / 5);
+
+    final spacing = 90 + _random.nextDouble() * (heightMinusGround / 4);
+    final centerY =
+        spacing + _random.nextDouble() * (heightMinusGround - spacing);
     addAll([
+      Pipe(pipePosition: PipePosition.top, height: centerY - spacing / 2),
       Pipe(
-        pipePosition: PipePosition.top,
-        height: randomHeight.toDouble(),
-      ),
-      Pipe(
-        pipePosition: PipePosition.bottom,
-        height: randomHeight.toDouble(),
-      ),
+          pipePosition: PipePosition.bottom,
+          height: heightMinusGround - (centerY + spacing / 2)),
     ]);
   }
 

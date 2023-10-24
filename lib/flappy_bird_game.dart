@@ -1,3 +1,4 @@
+import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flappy_bird/background.dart';
@@ -5,7 +6,8 @@ import 'package:flappy_bird/base.dart';
 import 'package:flappy_bird/bird.dart';
 import 'package:flappy_bird/pipe_generation.dart';
 
-class FlappyBirdGame extends FlameGame with TapDetector, HasCollisionDetection {
+class FlappyBirdGame extends FlameGame
+    with TapDetector, HasCollisionDetection, HasGameRef {
   FlappyBirdGame();
 
   double speed = 200;
@@ -36,5 +38,9 @@ class FlappyBirdGame extends FlameGame with TapDetector, HasCollisionDetection {
       add(PipeGeneration());
       _timeSinceLastPipeGenerated = 0;
     }
+  }
+
+  void restartGame() {
+    _bird.reset();
   }
 }
