@@ -1,12 +1,10 @@
 import 'dart:math';
-
 import 'package:flame/components.dart';
 import 'package:flappy_bird/flappy_bird_game.dart';
 import 'package:flappy_bird/pipe.dart';
 
 class PipeGeneration extends PositionComponent with HasGameRef<FlappyBirdGame> {
   PipeGeneration();
-  // final List<Pipe> pipes = [];
 
   final Random _random = Random();
 

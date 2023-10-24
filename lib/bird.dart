@@ -13,6 +13,7 @@ class Bird extends SpriteComponent
 
   double velocity = 75;
   final gravity = 3;
+
   @override
   FutureOr<void> onLoad() async {
     final birdUp = await Flame.images.load('bird_up.png');
@@ -50,10 +51,11 @@ class Bird extends SpriteComponent
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
+    game.collision = true;
     gameOver();
   }
 
-  gameOver() {
+  void gameOver() {
     gameRef.overlays.add('gameOver');
     gameRef.pauseEngine();
   }

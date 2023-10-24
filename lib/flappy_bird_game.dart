@@ -10,7 +10,6 @@ class FlappyBirdGame extends FlameGame
     with TapDetector, HasCollisionDetection, HasGameRef {
   FlappyBirdGame();
 
-  bool isOverlayVisible = false;
   bool collision = false;
   double speed = 200;
   double fps = 120;
@@ -51,8 +50,17 @@ class FlappyBirdGame extends FlameGame
     gameRef.pauseEngine();
   }
 
-  void onCollision() {
+  void onGameCollision() {
     collision = true;
-    pause();
+    gameRef.pauseEngine();
+  }
+
+  void pauseGame() {
+    gameRef.overlays.add('paused');
+    gameRef.pauseEngine();
+  }
+
+  void resumeGame() {
+    game.resumeEngine();
   }
 }
