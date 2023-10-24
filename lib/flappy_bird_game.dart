@@ -10,10 +10,13 @@ class FlappyBirdGame extends FlameGame
     with TapDetector, HasCollisionDetection, HasGameRef {
   FlappyBirdGame();
 
+  bool isOverlayVisible = false;
+  bool collision = false;
   double speed = 200;
   double fps = 120;
   late Bird _bird;
   double _timeSinceLastPipeGenerated = 0;
+
   @override
   Future<void> onLoad() async {
     addAll([
@@ -42,5 +45,14 @@ class FlappyBirdGame extends FlameGame
 
   void restartGame() {
     _bird.reset();
+  }
+
+  void pause() {
+    gameRef.pauseEngine();
+  }
+
+  void onCollision() {
+    collision = true;
+    pause();
   }
 }

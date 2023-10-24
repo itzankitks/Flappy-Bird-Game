@@ -18,10 +18,12 @@ class Bird extends SpriteComponent
     final birdUp = await Flame.images.load('bird_up.png');
     final imageSize = await Flame.images.load('bird_up.png').then((image) =>
         Size(image.width.toDouble() + 5, image.height.toDouble() + 5));
+
     size = Vector2(imageSize.width, imageSize.height);
     position = Vector2(gameRef.size.x / 5, (gameRef.size.y - size.y) / 2);
     sprite = Sprite(birdUp);
     add(RectangleHitbox());
+
     // final birdDown = await Flame.images.load('bird_down.png');
     // final birdMid = await Flame.images.load('bird_mid.png');
   }

@@ -17,10 +17,28 @@ class MyGameWrapper extends StatefulWidget {
 class _MyGameWrapperState extends State<MyGameWrapper> {
   late FlappyBirdGame game;
 
+  bool isPauseOverlayVisible = false;
+
   @override
   void initState() {
     super.initState();
     game = FlappyBirdGame();
+  }
+
+  void showPauseOverlay() {
+    if (game.collision == false) {
+      setState(() {
+        isPauseOverlayVisible = true;
+        game.pause();
+      });
+    }
+  }
+
+  void onGameCollision() {
+    setState(() {
+      game.collision = true;
+      isPauseOverlayVisible = false;
+    });
   }
 
   @override
@@ -28,14 +46,136 @@ class _MyGameWrapperState extends State<MyGameWrapper> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: GameWidget(
-          game: game,
-          overlayBuilderMap: {
-            'gameOver': (context, _) => GameOverPage(game: game),
-          },
+        body: Stack(
+          children: [
+            GameWidget(
+              game: game,
+              overlayBuilderMap: {
+                'gameOver': (context, _) => GameOverPage(game: game),
+              },
+            ),
+            if (isPauseOverlayVisible)
+              Positioned.fill(
+                child: Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 2 * MediaQuery.of(context).size.height / 5,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(
+                          width: 200,
+                          height: 75,
+                          child: Image(
+                            image: AssetImage("assets/images/paused.png"),
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                child: Column(
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          isPauseOverlayVisible = false;
+                                          game.resumeEngine();
+                                        });
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.transparent,
+                                        shadowColor: Colors.transparent,
+                                      ),
+                                      child: Container(
+                                        width: 50,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.black.withOpacity(0.5),
+                                              spreadRadius: 2,
+                                              blurRadius: 7,
+                                              offset: const Offset(0, 3),
+                                            ),
+                                          ],
+                                        ),
+                                        child: const Image(
+                                          image: AssetImage(
+                                              "assets/images/resume.png"),
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Resume"),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Column(
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        isPauseOverlayVisible = false;
+                                        game.resumeEngine();
+                                      });
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.transparent,
+                                      shadowColor: Colors.transparent,
+                                    ),
+                                    child: Container(
+                                      width: 50,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.5),
+                                            spreadRadius: 2,
+                                            blurRadius: 7,
+                                            offset: const Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      child: const Image(
+                                        image: AssetImage(
+                                            "assets/images/resume.png"),
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ),
+                                  const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text("Resume"),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+          ],
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: game.collision ? null : showPauseOverlay,
+          backgroundColor: game.collision ? Colors.grey : null,
+          disabledElevation: 0.0,
+          focusElevation: 5.0,
+          highlightElevation: 0.0,
+          hoverElevation: 0.0,
           child: const Image(image: AssetImage("assets/images/pause.png")),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
